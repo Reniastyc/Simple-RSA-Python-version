@@ -13,12 +13,6 @@ def MultiLanguage(l_language):
     global MultiLang_Encoding
     global MultiLang_Decoding
     global MultiLang_File
-    global MultiLang_SaveKey
-    global MultiLang_LoadKey
-    global MultiLang_SavePublic
-    global MultiLang_SavePrivate
-    global MultiLang_LoadPublic
-    global MultiLang_LoadPrivate
     
     if l_language == "Traditional Chinese":
         MultiLang_KeyDigit.set("密鑰位數（128 ~ 2048）")
@@ -29,12 +23,6 @@ def MultiLanguage(l_language):
         MultiLang_Module.set("模值")
         MultiLang_Encoding.set("編碼")
         MultiLang_Decoding.set("解碼")
-        MultiLang_SaveKey.set("保存密鑰")
-        MultiLang_LoadKey.set("讀取密鑰")
-        MultiLang_SavePublic.set("保存公鑰")
-        MultiLang_SavePrivate.set("保存私鑰")
-        MultiLang_LoadPublic.set("讀取公鑰")
-        MultiLang_LoadPrivate.set("讀取私鑰")
         
     elif l_language == "Simplified Chinese":
         MultiLang_KeyDigit.set("密钥位数（128 ~ 2048）")
@@ -45,12 +33,6 @@ def MultiLanguage(l_language):
         MultiLang_Module.set("模值")
         MultiLang_Encoding.set("编码")
         MultiLang_Decoding.set("解码")
-        MultiLang_SaveKey.set("保存密钥")
-        MultiLang_LoadKey.set("读取密钥")
-        MultiLang_SavePublic.set("保存公钥")
-        MultiLang_SavePrivate.set("保存私钥")
-        MultiLang_LoadPublic.set("读取公钥")
-        MultiLang_LoadPrivate.set("读取私钥")
         
     else:
         MultiLang_KeyDigit.set("$KeyDigit")
@@ -88,11 +70,9 @@ def button_DecodingCommand():
     text_Code.delete("1.0", "end")
     text_Code.insert("1.0", l_result)
     
-def radio_LanguageRadioButton():
-    MultiLanguage(g_language.get())
+def menu_LanguageRadioButton():
     
-def button_SaveKeyCommand():
-    pass
+    MultiLanguage(g_language.get())
     
 g_RSAn, g_RSAe, g_RSAd = 0, 0, 0
 
@@ -106,19 +86,14 @@ MultiLang_PrivateKey = tkinter.StringVar()
 MultiLang_Module = tkinter.StringVar()
 MultiLang_Encoding = tkinter.StringVar()
 MultiLang_Decoding = tkinter.StringVar()
-MultiLang_SaveKey = tkinter.StringVar()
-MultiLang_LoadKey = tkinter.StringVar()
-MultiLang_SavePublic = tkinter.StringVar()
-MultiLang_SavePrivate = tkinter.StringVar()
-MultiLang_LoadPublic = tkinter.StringVar()
-MultiLang_LoadPrivate = tkinter.StringVar()
+MultiLang_File = tkinter.StringVar()
 
 g_language = tkinter.StringVar()
 
 screen_width, screen_height = root.maxsize()
 
 window_width = 1105
-window_height = 900
+window_height = 850
 
 position_x = int((screen_width - window_width) / 2)
 position_y = int((screen_height - window_height) / 2)
@@ -129,62 +104,57 @@ root.resizable(width = False, height = False)
 
 root.title("Simple RSA v1.0")
 
+menu_Main = tkinter.Menu(root, font = ("I.Ming", 10))
+menu_Language = tkinter.Menu(menu_Main, tearoff = 0)
+cascade_Language = menu_Main.add_cascade(label = "Language", menu = menu_Language)
+menu_Language.add_radiobutton(label = "傳統中文", variable = g_language, value = "Traditional Chinese", command = menu_LanguageRadioButton)
+menu_Language.add_radiobutton(label = "简化中文", variable = g_language, value = "Simplified Chinese", command = menu_LanguageRadioButton)
+
 g_language.set("Simplified Chinese")
 
-g_font = ("I.Ming", 15)
+root.config(menu = menu_Main)
 
-radio_Lang_SC = tkinter.Radiobutton(root, text = "简化中文", font = g_font, justify = "center", variable = g_language, value = "Simplified Chinese", command = radio_LanguageRadioButton)
-radio_Lang_SC.grid(row = 0, column = 0)
+label_RSAdigit = tkinter.Label(root, textvariable = MultiLang_KeyDigit, font = ("I.Ming", 20), justify = "center")
+label_RSAdigit.grid(row = 0, column = 0, columnspan = 2)
 
-radio_Lang_TC = tkinter.Radiobutton(root, text = "傳統中文", font = g_font, justify = "center", variable = g_language, value = "Traditional Chinese", command = radio_LanguageRadioButton)
-radio_Lang_TC.grid(row = 0, column = 1)
+entry_RSAdigit = tkinter.Entry(root, width = 10, font = ("I.Ming", 20), justify = "center")
+entry_RSAdigit.grid(row = 0, column = 2)
 
-button_SaveKey = tkinter.Button(root, textvariable = MultiLang_SaveKey, font = g_font, justify = "center", command = button_SaveKeyCommand)
-button_SaveKey.grid(row = 1, column = 0)
+label_Publicdigit = tkinter.Label(root, textvariable = MultiLang_PublicDigit, font = ("I.Ming", 20), justify = "center")
+label_Publicdigit.grid(row = 0, column = 4, columnspan = 2)
 
+entry_Publicdigit = tkinter.Entry(root, width = 10, font = ("I.Ming", 20), justify = "center")
+entry_Publicdigit.grid(row = 0, column = 6)
 
+button_KeyCalculate = tkinter.Button(root, textvariable = MultiLang_KeyCalculate, font = ("I.Ming", 20), justify = "center", command = button_KeyCalculateCommand)
+button_KeyCalculate.grid(row = 1, column = 3)
 
-label_RSAdigit = tkinter.Label(root, textvariable = MultiLang_KeyDigit, font = g_font, justify = "center")
-label_RSAdigit.grid(row = 2, column = 0, columnspan = 2)
-
-entry_RSAdigit = tkinter.Entry(root, width = 10, font = g_font, justify = "center")
-entry_RSAdigit.grid(row = 2, column = 2)
-
-label_Publicdigit = tkinter.Label(root, textvariable = MultiLang_PublicDigit, font = g_font, justify = "center")
-label_Publicdigit.grid(row = 2, column = 4, columnspan = 2)
-
-entry_Publicdigit = tkinter.Entry(root, width = 10, font = g_font, justify = "center")
-entry_Publicdigit.grid(row = 2, column = 6)
-
-button_KeyCalculate = tkinter.Button(root, textvariable = MultiLang_KeyCalculate, font = g_font, justify = "center", command = button_KeyCalculateCommand)
-button_KeyCalculate.grid(row = 3, column = 3)
-
-label_PublicKey = tkinter.Label(root, textvariable = MultiLang_PublicKey, font = g_font, justify = "center")
-label_PublicKey.grid(row = 4, column = 0)
+label_PublicKey = tkinter.Label(root, textvariable = MultiLang_PublicKey, font = ("I.Ming", 20), justify = "center")
+label_PublicKey.grid(row = 2, column = 0)
 
 text_PublicKey = tkinter.Text(root, width = 80, height = 2, font = ("I.Ming", 15))
-text_PublicKey.grid(row = 4, column = 1, columnspan = 6)
+text_PublicKey.grid(row = 2, column = 1, columnspan = 6)
 
-label_PrivateKey = tkinter.Label(root, textvariable = MultiLang_PrivateKey, font = g_font, justify = "center")
-label_PrivateKey.grid(row = 5, column = 0)
+label_PrivateKey = tkinter.Label(root, textvariable = MultiLang_PrivateKey, font = ("I.Ming", 20), justify = "center")
+label_PrivateKey.grid(row = 3, column = 0)
 
 text_PrivateKey = tkinter.Text(root, width = 80, height = 8, font = ("I.Ming", 15))
-text_PrivateKey.grid(row = 5, column = 1, columnspan = 6)
+text_PrivateKey.grid(row = 3, column = 1, columnspan = 6)
 
-label_Module = tkinter.Label(root, textvariable = MultiLang_Module, font = g_font, justify = "center")
-label_Module.grid(row = 6, column = 0)
+label_Module = tkinter.Label(root, textvariable = MultiLang_Module, font = ("I.Ming", 20), justify = "center")
+label_Module.grid(row = 4, column = 0)
 
 text_Module = tkinter.Text(root, width = 80, height = 8, font = ("I.Ming", 15))
-text_Module.grid(row = 6, column = 1, columnspan = 6)
+text_Module.grid(row = 4, column = 1, columnspan = 6)
 
-button_Encoding = tkinter.Button(root, textvariable = MultiLang_Encoding, font = g_font, justify = "center", command = button_EncodingCommand)
-button_Encoding.grid(row = 7, column = 2)
+button_Encoding = tkinter.Button(root, textvariable = MultiLang_Encoding, font = ("I.Ming", 20), justify = "center", command = button_EncodingCommand)
+button_Encoding.grid(row = 5, column = 2)
 
-button_Decoding = tkinter.Button(root, textvariable = MultiLang_Decoding, font = g_font, justify = "center", command = button_DecodingCommand)
-button_Decoding.grid(row = 7, column = 4)
+button_Decoding = tkinter.Button(root, textvariable = MultiLang_Decoding, font = ("I.Ming", 20), justify = "center", command = button_DecodingCommand)
+button_Decoding.grid(row = 5, column = 4)
 
 text_Code = tkinter.Text(root, width = 90, height = 10, font = ("I.Ming", 15))
-text_Code.grid(row = 8, column = 0, columnspan = 7)
+text_Code.grid(row = 6, column = 0, columnspan = 7)
 
 MultiLanguage(g_language.get())
 
