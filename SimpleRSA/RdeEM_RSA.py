@@ -36,15 +36,9 @@ def CalculateRSA(l_keydigit, l_pubdigit):
         return l_RSAn, l_RSAe, l_RSAd
     else:
         return CalculateRSA(l_keydigit, l_pubdigit)
-
-def RSAEncoding(l_code, l_RSAe, l_RSAn):
-    if l_code >= l_RSAn:
-        return 0
-    else:
-        return pow(l_code, l_RSAe, l_RSAn)
     
-def RSADecoding(l_code, l_RSAd, l_RSAn):
+def RSACoding(l_code, l_RSAed, l_RSAn):
     if l_code >= l_RSAn:
         return 0
     else:
-        return pow(l_code, l_RSAd, l_RSAn)
+        return pow(l_code, l_RSAed, l_RSAn)

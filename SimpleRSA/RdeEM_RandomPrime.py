@@ -12,7 +12,7 @@ def GetRandomNumber(l_digit):
     l_random += 1 << l_digit
     return l_random
 
-def GetRandomPrime(l_digit, l_level = 25):
+def GetRandomPrime(l_digit, l_level = 30):
     if not isinstance(l_digit, int):
         return 0
     
