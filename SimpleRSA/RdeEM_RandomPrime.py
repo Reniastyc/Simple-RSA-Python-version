@@ -1,32 +1,30 @@
-import random
-import RdeEM_PrimeTest
-
 def GetRandomNumber(l_digit):
+    from random import randint
+
     if not isinstance(l_digit, int):
         return 0
     
     if l_digit < 2:
         l_digit = 2
     
-    l_random = random.randint(1, 1 << l_digit - 1)
-    l_random += 1 << l_digit
+    l_num = 1 << (l_digit - 1)
+
+    l_random = randint(0, l_num - 1)
+    l_random += l_num
     return l_random
 
-def GetRandomPrime(l_digit, l_level = 30):
+def GetRandomPrime(l_digit, l_level = 3):
+    from RdeEM_PrimeTest import MillerRabin
+
     if not isinstance(l_digit, int):
         return 0
     
-    l_random = GetRandomNumber(l_digit - 3)
-    
-    l_random *= 6
-    l_random -= 1
-    
+    l_random = GetRandomNumber(l_digit) // 6 * 6 - 1
+
     while True:
         l_random += 2
-        if RdeEM_PrimeTest.MillerRabin(l_random, l_level):
-            break
+        if MillerRabin(l_random, l_level):
+            return l_random
         l_random += 4
-        if RdeEM_PrimeTest.MillerRabin(l_random, l_level):
-            break
-    
-    return l_random
+        if MillerRabin(l_random, l_level):
+            return l_random
